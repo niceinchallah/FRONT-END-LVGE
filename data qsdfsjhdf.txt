@@ -1,0 +1,22 @@
+const employeeData = [
+    {
+      id: 1,
+      FULL_NAME: 'mohamed',
+      salary: 4500,
+      avatarUrl: 'https://th.bing.com/th/id/OIP.-5z0DzxtnegQtLgnTwwRxAHaFj?rs=1&pid=ImgDetMain',
+    },
+    {
+      id: 2,
+      FULL_NAME: 'hassan',
+      position: 'CFO',
+      salary: 3500,
+      avatarUrl: 'https://www.pointdevue.fr//storage/images/biography_900/2019/09/gettyimages-1178062210.jpg',
+    },
+    {
+      id: 3,
+      FULL_NAME: 'Rachid',
+      position: 'CTO',
+      salary: 4000,
+      avatarUrl: 'https://fr.hibapress.com/wp-content/uploads/2021/06/images-35.jpg',
+    },
+  ]; data fuffifbsbdf
