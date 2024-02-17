@@ -1,3 +1,5 @@
-# modernize-react-lite
-
-Live demo url <a href="https://modernize-react-free.netlify.app/dashboard">Live Demo</a>
+LVGE FRONT END ADMIN 
+كيفية الاستعمال: 
+بعد تحميله واضافته الى محرر الكود سوف:
+     .تفعل في التيرمينال "npm install "
+    .عند تفعيله سيءتي وقت بدءه في السيرفر و ذلك ب"npm start 
