@@ -7,17 +7,37 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney'; // Icône de l'ar
 import PageContainer from 'src/components/container/PageContainer';
 import Logo from 'src/layouts/full/shared/logo/Logo';
 
-const AddEmployee = ({ onClose }) => {
+const AddEmployee = ({ onClose , onEmployeeAdded}) => {
   const [employeeName, setEmployeeName] = useState('');
   const [employeeSalary, setEmployeeSalary] = useState('');
 
   const handleAddEmployee = () => {
-    // Logique pour ajouter l'employé (vous pouvez ajouter votre logique ici)
-    console.log('Adding employee:', { name: employeeName, salary: employeeSalary });
-    // Réinitialiser les champs après l'ajout
-    setEmployeeName('');
-    setEmployeeSalary('');
-    onClose && onClose();
+    const employeeData = {
+      name: employeeName,
+      salary: employeeSalary
+    };
+  
+    fetch('http://localhost:8080/api/Employe', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(employeeData)
+    })
+    .then(response => {
+      if (response.ok) {
+        console.log('Employee added successfully!');
+        setEmployeeName('');
+        setEmployeeSalary('');
+        onEmployeeAdded(); // Appel de la fonction de rappel pour signaler l'ajout réussi
+        onClose && onClose();
+      } else {
+        console.error('Failed to add employee');
+      }
+    })
+    .catch(error => {
+      console.error('Error adding employee:', error);
+    });
   };
   const handleClose = () => {
     onClose(); // Call the onClose prop to handle closing

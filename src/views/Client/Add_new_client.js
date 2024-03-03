@@ -1,71 +1,75 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Grid, Box, Stack, Typography, TextField, Button, InputLabel, Input } from '@mui/material';
-import { useDropzone } from 'react-dropzone'; // Import the useDropzone hook
-import { IconButton } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-
-// components
+import { Grid, Box, Stack, Typography, TextField, Button } from '@mui/material';
+import { useDropzone } from 'react-dropzone';
 import PageContainer from 'src/components/container/PageContainer';
-import Logo from 'src/layouts/full/shared/logo/Logo';
 
-const Add_new_client = ({ onClose }) => {
-
+const Add_new_client = ({  onClose , onAddClient }) => {
   const [clientName, setClientName] = useState('');
   const [carBrand, setCarBrand] = useState('');
   const [carModel, setCarModel] = useState('');
   const [clientPhoto, setClientPhoto] = useState(null);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    accept: 'image/*', // N'accepte que les images
     onDrop: (acceptedFiles) => {
-      setClientPhoto(acceptedFiles[0]); // Stocker la première image déposée
+      setClientPhoto(acceptedFiles[0]);
+      ; 
     },
   });
 
-  const handleAddClient = () => {
-    // Logique pour ajouter le client (vous pouvez ajouter votre logique ici)
-    console.log('Adding client:', { name: clientName, brand: carBrand, model: carModel, photo: clientPhoto });
-    // Réinitialiser les champs après l'ajout
-    setClientName('');
-    setCarBrand('');
-    setCarModel('');
-    setClientPhoto(null);
-    onClose && onClose();
+  const handleAddClient = async () => {
+    const formData = new FormData();
+    formData.append('name', clientName);
+    formData.append('brand', carBrand);
+    formData.append('model', carModel);
+    // Check if clientPhoto is not null before appending it to the formData
+    if (clientPhoto) {
+      formData.append('photo', clientPhoto);
+    }
+    fetch('http://localhost:8080/api/Clients', {
+      method: 'POST',
+      body: formData,
+    })   
+    .then((response) => {
+      return response.text(); // Lire le contenu de la réponse en tant que texte
+    })
+    .then((text) => {
+      console.log('Response text:', text); // Afficher le texte de la réponse
+      // Convertir le texte en JSON
+      const data = JSON.parse(text);
+      console.log('Client added successfully:', data);
+      onAddClient && onAddClient(data); // Call onAddClient with the added client data
+      handleClose(); // Close the window after adding the client
+    })
+    
+      .then((data) => {
+        console.log('Client added successfully:', data);
+        onAddClient && onAddClient(data); // Call onAddClient with the added client data
+        handleClose(); // Close the window after adding the client
+      })
+      .catch((error) => {
+        console.error('Error adding client:', error);
+      });
   };
   const handleClose = () => {
     onClose(); // Call the onClose prop to handle closing
   };
-  
   return (
     <PageContainer title="Add Client" description="Add a new client with name, car brand, and model">
-      {/* Close button */}
-      <div>
+      
+      <Box sx={{ position: 'relative', backgroundColor: 'white', marginTop: '-50px' }}>
+     
+        <Grid container spacing={0} justifyContent="center" alignItems="center" sx={{ height: '100vh' }}>
+          <Grid item xs={12} sm={12} lg={4} xl={3}>
+            <Box sx={{ width: '100%', textAlign: 'center' }}>
+              <Stack spacing={2} mt={3}>
+              <div>
       {/* Form content */}
       <Button variant="contained" onClick={handleClose}>
         Close
       </Button>
     </div>
-
-      <Box
-        sx={{
-          position: 'relative',
-          backgroundColor: 'white',
-          marginTop: '-50px',
-        }}
-      >
-        <Grid container spacing={0} justifyContent="center" alignItems="center" sx={{ height: '100vh' }}>
-          <Grid item xs={12} sm={12} lg={4} xl={3}>
-            <Box sx={{ width: '100%', textAlign: 'center' }}>*
-            <div>
-        <Button variant="contained" onClick={handleClose}>
-          Close
-        </Button>
-      </div>
-              <Stack spacing={2} mt={3}>
                 <Typography color="textSecondary" variant="h6" fontWeight="500">
                   NEW CLIENT?
                 </Typography>
-                {/* Champ de saisie pour le nom du client */}
                 <TextField
                   fullWidth
                   label="FULL NAME"
@@ -73,7 +77,6 @@ const Add_new_client = ({ onClose }) => {
                   value={clientName}
                   onChange={(e) => setClientName(e.target.value)}
                 />
-                {/* Champ de saisie pour la marque de la voiture */}
                 <TextField
                   fullWidth
                   label="CAR BRAND"
@@ -81,7 +84,6 @@ const Add_new_client = ({ onClose }) => {
                   value={carBrand}
                   onChange={(e) => setCarBrand(e.target.value)}
                 />
-                {/* Champ de saisie pour le modèle de la voiture */}
                 <TextField
                   fullWidth
                   label="CAR MODEL"
@@ -89,7 +91,6 @@ const Add_new_client = ({ onClose }) => {
                   value={carModel}
                   onChange={(e) => setCarModel(e.target.value)}
                 />
-                {/* Champ de saisie pour la photo de la voiture (optionnel) */}
                 <Stack spacing={2}>
                   <input {...getInputProps()} />
                   <div {...getRootProps()} style={{ width: '100%', height: 150, borderWidth: 2, borderColor: 'gray', borderStyle: 'dashed' }}>
@@ -100,20 +101,17 @@ const Add_new_client = ({ onClose }) => {
                     )}
                   </div>
                 </Stack>
-                {/* Bouton Ajouter */}
                 <Button variant="contained" color="primary" fullWidth onClick={handleAddClient}>
                   ADD CLIENT
                 </Button>
-              </Stack>
-              <Stack direction="row" spacing={1} justifyContent="center" mt={3}>
               </Stack>
             </Box>
           </Grid>
         </Grid>
       </Box>
-
     </PageContainer>
   );
 };
-
 export default Add_new_client;
+
+
