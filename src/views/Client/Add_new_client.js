@@ -14,44 +14,60 @@ const Add_new_client = ({  onClose , onAddClient }) => {
       ; 
     },
   });
-
+  const handleClose = () => {
+    onClose(); // Call the onClose prop to handle closing
+  };
   const handleAddClient = async () => {
     const formData = new FormData();
     formData.append('name', clientName);
     formData.append('brand', carBrand);
     formData.append('model', carModel);
-    // Check if clientPhoto is not null before appending it to the formData
     if (clientPhoto) {
       formData.append('photo', clientPhoto);
     }
     fetch('http://localhost:8080/api/Clients', {
-      method: 'POST',
+      method: 'POST',   
       body: formData,
     })   
-    .then((response) => {
-      return response.text(); // Lire le contenu de la réponse en tant que texte
-    })
-    .then((text) => {
-      console.log('Response text:', text); // Afficher le texte de la réponse
+   .then(async (response) => {
+  // Vérifier le type de contenu de la réponse
+  const contentType = response.headers.get('content-type');
+  handleClose(); 
+  // Si le type de contenu est une image     
+  if (contentType && contentType.startsWith('image')) { 
+    // Traiter la réponse comme une image
+    console.log('Response is an image');
+    const blob = await response.blob();
+    // Gérer le blob d'image ici (par exemple, l'afficher dans votre application)
+  } else {
+    // Si le type de contenu n'est pas une image, lire la réponse comme du texte
+    return response.text(); 
+  
+  // Lire le contenu de la réponse en tant que texte
+  }
+})
+
+.then((text) => {
+  if (text) {
+    try {
       // Convertir le texte en JSON
       const data = JSON.parse(text);
       console.log('Client added successfully:', data);
       onAddClient && onAddClient(data); // Call onAddClient with the added client data
       handleClose(); // Close the window after adding the client
-    })
-    
-      .then((data) => {
-        console.log('Client added successfully:', data);
-        onAddClient && onAddClient(data); // Call onAddClient with the added client data
-        handleClose(); // Close the window after adding the client
-      })
-      .catch((error) => {
-        console.error('Error adding client:', error);
-      });
+    } catch (error) {
+      // Si le texte ne peut pas être analysé en tant que JSON, considérez-le comme un message texte
+      console.log('Response is a text message:', text);
+      // Autre traitement ici si nécessaire
+    }
+  } else {
+    console.log('Empty response'); // Réponse vide
+    // Autre traitement ici si nécessaire
+  }
+})
+
   };
-  const handleClose = () => {
-    onClose(); // Call the onClose prop to handle closing
-  };
+
   return (
     <PageContainer title="Add Client" description="Add a new client with name, car brand, and model">
       
