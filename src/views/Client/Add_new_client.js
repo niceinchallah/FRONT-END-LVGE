@@ -29,13 +29,13 @@ const Add_new_client = ({  onClose , onAddClient }) => {
       method: 'POST',   
       body: formData,
     })   
-   .then(async (response) => {
+   .then(async (response) => { 
   // Vérifier le type de contenu de la réponse
   const contentType = response.headers.get('content-type');
   handleClose(); 
-  // Si le type de contenu est une image     
+  // Si le type de contenu est une image              
   if (contentType && contentType.startsWith('image')) { 
-    // Traiter la réponse comme une image
+    // Traiter la réponse comme une image 
     console.log('Response is an image');
     const blob = await response.blob();
     // Gérer le blob d'image ici (par exemple, l'afficher dans votre application)
