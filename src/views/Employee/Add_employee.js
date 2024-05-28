@@ -1,20 +1,18 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { Grid, Box, Stack, Typography, TextField, Button, InputAdornment } from '@mui/material';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'; // Icône de l'argent
 
 // components
 import PageContainer from 'src/components/container/PageContainer';
-import Logo from 'src/layouts/full/shared/logo/Logo';
 
-const AddEmployee = ({ onClose , onEmployeeAdded}) => {
-  const [employeeName, setEmployeeName] = useState('');
-  const [employeeSalary, setEmployeeSalary] = useState('');
+const AddEmployee = ({ onClose , onEmployeeAdded }) => {
+  const [name, setname] = useState('');
+  const [salary, setsalary] = useState('');
 
   const handleAddEmployee = () => {
     const employeeData = {
-      name: employeeName,
-      salary: employeeSalary
+      name:name,
+      salary: salary
     };
   
     fetch('http://localhost:8080/api/Employe', {
@@ -27,9 +25,9 @@ const AddEmployee = ({ onClose , onEmployeeAdded}) => {
     .then(response => {
       if (response.ok) {
         console.log('Employee added successfully!');
-        setEmployeeName('');
-        setEmployeeSalary('');
-        onEmployeeAdded(); // Appel de la fonction de rappel pour signaler l'ajout réussi
+        setname('');
+        setsalary('');
+        onEmployeeAdded && onEmployeeAdded(); // Appel de la fonction de rappel pour signaler l'ajout réussi
         onClose && onClose();
       } else {
         console.error('Failed to add employee');
@@ -39,18 +37,12 @@ const AddEmployee = ({ onClose , onEmployeeAdded}) => {
       console.error('Error adding employee:', error);
     });
   };
-  const handleClose = () => {
+  const handleClose = () => {              
     onClose(); // Call the onClose prop to handle closing
   };
   return (
     <PageContainer title="Add Employee" description="Add a new employee with name and optional salary">
-     {/* Close button */}
-     <div>
-      {/* Form content */}
-      <Button variant="contained" onClick={handleClose}>
-        Close
-      </Button>
-    </div>
+      
       <Box
         sx={{
           position: 'relative',
@@ -61,30 +53,32 @@ const AddEmployee = ({ onClose , onEmployeeAdded}) => {
         <Grid container spacing={0} justifyContent="center" alignItems="center" sx={{ height: '100vh' }}>
           <Grid item xs={12} sm={12} lg={4} xl={3}>
             <Box sx={{ width: '100%', textAlign: 'center' }}>
-            <div>
-        <Button variant="contained" onClick={handleClose}>
-          Close
-        </Button>
-      </div>
               <Stack spacing={2} mt={3}>
+              <div>
+      {/* Form content */}
+      <Button variant="contained"  size="small" onClick={onClose} sx={{ width: '10%', marginTop: '1px' }} >
+        Close
+      </Button>
+    </div>
                 <Typography color="textSecondary" variant="h6" fontWeight="500">
-                  NEW EMPLOYEE?
+                  NEW EMPLOYEE
                 </Typography>
+            
                 {/* Champ de saisie pour le nom de l'employé */}
                 <TextField
                   fullWidth
                   label="FULL NAME"
                   variant="outlined"
-                  value={employeeName}
-                  onChange={(e) => setEmployeeName(e.target.value)}
+                  value={name}
+                  onChange={(e) => setname(e.target.value)}
                 />
                 {/* Champ de saisie pour le salaire de l'employé avec symbole d'argent */}
                 <TextField
                   fullWidth
                   label="Salary (Optional)"
                   variant="outlined"
-                  value={employeeSalary}
-                  onChange={(e) => setEmployeeSalary(e.target.value.replace(/[^0-9.]/g, ''))}
+                  value={salary}
+                  onChange={(e) => setsalary(e.target.value.replace(/[^0-9.]/g, ''))}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -98,6 +92,8 @@ const AddEmployee = ({ onClose , onEmployeeAdded}) => {
                 <Button variant="contained" color="primary" fullWidth onClick={handleAddEmployee}>
                   ADD EMPLOYEE
                 </Button>
+                {/* Bouton Close */}
+               
               </Stack>
               <Stack direction="row" spacing={1} justifyContent="center" mt={3}>
                 
@@ -111,4 +107,5 @@ const AddEmployee = ({ onClose , onEmployeeAdded}) => {
 };
 
 export default AddEmployee;
+
 

@@ -1,7 +1,7 @@
 
 import { MdAccountCircle } from "react-icons/md"; 
 import {  IconLayoutDashboard, IconLogin,   IconUserPlus,IconCar,IconCamera,IconMoneybag,IconPlus
-,IconCash,IconBottle, IconTransitionRight,IconUser, IconUsers} from '@tabler/icons';
+,IconCash,IconBottle, IconTransitionRight,IconUser, IconUsers,IconFileAnalytics} from '@tabler/icons';
 
 
 import { uniqueId } from 'lodash';
@@ -37,7 +37,7 @@ const Menuitems = [
     id: uniqueId(),
     title: 'vehicles',
     icon: IconCar,
-    href: '/ui/typography',
+    href: '/ui/VEHICLES',
   },
   /*{
     id: uniqueId(),
@@ -100,6 +100,16 @@ const Menuitems = [
     title: 'Employees',
     icon: IconUsers,
     href: '/Employee/Employees',
+  },
+  {
+    navlabel: true,
+    subheader: 'Facturation',
+  },
+  {
+    id: uniqueId(),
+    title: 'Facture',
+    icon: IconFileAnalytics,
+    href: '/FACTURE/Facture',
   },
   /*{
     id: uniqueId(),

@@ -39,7 +39,7 @@ const Mats = () => {
             {/* Material Expense occupe une moitié de la ligne */}
             <Materialexpense />
           </Grid>
-          <Grid item xs={12} lg={6}>
+          <Grid item xs={12} lg={1}>
             {/* Material Global occupe l'autre moitié de la ligne */}
             <Materialglobal />
           </Grid>

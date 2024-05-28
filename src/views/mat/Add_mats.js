@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { Grid, Box, Stack, Typography, TextField, Button, Chip, InputAdornment } from '@mui/material';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'; // Icône de l'argent
+import axios from 'axios'; // Importer Axios pour effectuer des requêtes HTTP
 
 // components
 import PageContainer from 'src/components/container/PageContainer';
-import Logo from 'src/layouts/full/shared/logo/Logo';
 
 const Add_mats = ({ onClose }) => {
   const [materialSuggestions, setMaterialSuggestions] = useState([
@@ -17,13 +16,32 @@ const Add_mats = ({ onClose }) => {
   ]);
   const [selectedMaterial, setSelectedMaterial] = useState('');
   const [price, setPrice] = useState('');
-  const [showAddmats, setShowAddNewmats] = useState(false);
   const handleMaterialClick = (material) => {
     setSelectedMaterial(material);
   };
+
+  const handleAddMaterial = async () => {
+    try {
+      const newMaterial = {
+        name: selectedMaterial,
+        price: price,
+        date: new Date().toISOString().slice(0, 10), // Date actuelle
+      };
+      const response = await axios.post('http://localhost:8080/api/materials', newMaterial);
+      console.log('Material added successfully:', response.data);
+      // Réinitialiser les valeurs après l'ajout réussi
+      setSelectedMaterial('');
+      setPrice('');
+      handleClose();
+    } catch (error) {
+      console.error('Error adding material:', error);
+    }
+  };
+
   const handleClose = () => {
     onClose(); // Call the onClose prop to handle closing
   };
+
   return (
     <PageContainer title="Add_material" description="this is Add_material">
       <Box
@@ -36,11 +54,11 @@ const Add_mats = ({ onClose }) => {
         <Grid container spacing={0} justifyContent="center" alignItems="center" sx={{ height: '100vh' }}>
           <Grid item xs={12} sm={12} lg={4} xl={3}>
             <Box sx={{ width: '100%', textAlign: 'center' }}>
-            <div>
-        <Button variant="contained" onClick={handleClose}>
-          Close
-        </Button>
-      </div>
+              <div>
+                <Button variant="contained" onClick={handleClose}>
+                  Close
+                </Button>
+              </div>
               <Stack spacing={2} mt={3}>
                 <Typography color="textSecondary" variant="h6" fontWeight="500">
                   NEW MATERIAL?
@@ -82,7 +100,7 @@ const Add_mats = ({ onClose }) => {
                   type="number" // Définir le type de champ comme nombre
                 />
                 {/* Bouton Ajouter */}
-                <Button variant="contained" color="primary" fullWidth>
+                <Button variant="contained" color="primary" fullWidth onClick={handleAddMaterial}>
                   ADD
                 </Button>
               </Stack>
@@ -98,3 +116,4 @@ const Add_mats = ({ onClose }) => {
 };
 
 export default Add_mats;
+

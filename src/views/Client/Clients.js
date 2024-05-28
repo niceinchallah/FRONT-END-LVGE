@@ -53,7 +53,7 @@ const Clients = () => {
     } catch (error) {
       console.error('Erreur lors de l\'ajout du client :', error);
     }
-  };       
+  };      
 
   const handleDeleteClient = async (id) => {
     try {

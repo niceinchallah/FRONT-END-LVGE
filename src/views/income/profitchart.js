@@ -16,32 +16,39 @@ const generateChartData = (type, year, month) => {
 
   if (type === 'year') {
     for (let i = 1; i <= 12; i++) {
+      const earnings = Math.floor(Math.random() * 1000);
+      const expenses = Math.floor(Math.random() * 1000);
       data.push({
         x: monthNames[i - 1],
-        y1: Math.floor(Math.random() * 1000), // Replace with your actual data for earnings
-      y2: Math.floor(Math.random() * 1000), 
+        y1: earnings,
+        y2: expenses,
+        valueWithCurrency1: `$${earnings}`, // Valeur des revenus avec dollar
+        valueWithCurrency2: `$${expenses}`, // Valeur des dépenses avec dollar
       });
     }
   } else {
     const daysInMonth = new Date(year, month, 0).getDate();
     for (let i = 1; i <= (type === 'year' ? 12 : daysInMonth); i++) {
+      const earnings = Math.floor(Math.random() * 1000);
+      const expenses = Math.floor(Math.random() * 1000);
       data.push({
-        x: type === 'year' ? `Month ${i}` : `${monthNames[month - 1]} ${i}`, // Subtract 1 from month to match JavaScript Date object's month index
-         y1: Math.floor(Math.random() * 1000), // Replace with your actual data for earnings
-      y2: Math.floor(Math.random() * 1000),  // Replace with your actual data
+        x: type === 'year' ? `Month ${i}` : `${monthNames[month - 1]} ${i}`,
+        y1: earnings,
+        y2: expenses,
+        valueWithCurrency1: `${earnings}$`, // Valeur des revenus avec dollar
+        valueWithCurrency2: `${expenses}$`, // Valeur des dépenses avec dollar
       });
-
-
+    }
   }
-  }
+
   return [
     {
       name: 'Earnings',
-      data: data.map(item => ({ x: item.x, y: item.y1 })),
+      data: data.map(item => ({ x: item.x, y: item.y1, valueWithCurrency: item.valueWithCurrency1 })),
     },
     {
       name: 'Expenses',
-      data: data.map(item => ({ x: item.x, y: item.y2 })),
+      data: data.map(item => ({ x: item.x, y: item.y2, valueWithCurrency: item.valueWithCurrency2 })),
     },
   ];
 };
@@ -59,6 +66,7 @@ const generateXAxisCategories = (type, year, month) => {
     return monthNames; // Retourne les noms des mois pour le type 'year'
   }
 };
+
 
 
 
@@ -172,10 +180,14 @@ const  Profitchart = () => {
       },
     },
   
-  
     tooltip: {
       theme: theme.palette.mode === 'dark' ? 'dark' : 'light',
       fillSeriesColor: false,
+      y: {
+        formatter: function (val, { seriesIndex, dataPointIndex, w }) {
+          return w.config.series[seriesIndex].data[dataPointIndex].valueWithCurrency;
+        },
+      },
     },
   };
 

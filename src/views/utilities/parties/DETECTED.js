@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Select, MenuItem } from '@mui/material';
 import PageContainer from 'src/components/container/PageContainer';
-import DashboardCard from '../../components/shared/DashboardCard';
+import DashboardCard from '../../../components/shared/DashboardCard';
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 
 // Function to generate random car data
@@ -46,7 +46,7 @@ const Item = styled(Paper)(({ theme }) => ({
 const darkTheme = createTheme({ palette: { mode: 'dark' } });
 const lightTheme = createTheme({ palette: { mode: 'light' } });
 
-const Shadow = () => {
+const DETECTED = () => {
   const [filter, setFilter] = useState('day');
   const carData = generateRandomCarData();
 
@@ -123,4 +123,4 @@ const Shadow = () => {
   );
 };
 
-export default Shadow;
+export default DETECTED;

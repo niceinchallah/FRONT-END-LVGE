@@ -16,32 +16,39 @@ const generateChartData = (type, year, month) => {
 
   if (type === 'year') {
     for (let i = 1; i <= 12; i++) {
+      const earnings = Math.floor(Math.random() * 1000);
+      const expenses = Math.floor(Math.random() * 1000);
       data.push({
         x: monthNames[i - 1],
-        y1: Math.floor(Math.random() * 1000), // Replace with your actual data for earnings
-      y2: Math.floor(Math.random() * 1000), 
+        y1: earnings,
+        y2: expenses,
+        valueWithCurrency1: `$${earnings}`, // Valeur des revenus avec dollar
+        valueWithCurrency2: `$${expenses}`, // Valeur des dépenses avec dollar
       });
     }
   } else {
     const daysInMonth = new Date(year, month, 0).getDate();
     for (let i = 1; i <= (type === 'year' ? 12 : daysInMonth); i++) {
+      const earnings = Math.floor(Math.random() * 1000);
+      const expenses = Math.floor(Math.random() * 1000);
       data.push({
-        x: type === 'year' ? `Month ${i}` : `${monthNames[month - 1]} ${i}`, // Subtract 1 from month to match JavaScript Date object's month index
-         y1: Math.floor(Math.random() * 1000), // Replace with your actual data for earnings
-      y2: Math.floor(Math.random() * 1000),  // Replace with your actual data
+        x: type === 'year' ? `Month ${i}` : `${monthNames[month - 1]} ${i}`,
+        y1: earnings,
+        y2: expenses,
+        valueWithCurrency1: `${earnings}$`, // Valeur des revenus avec dollar
+        valueWithCurrency2: `${expenses}$`, // Valeur des dépenses avec dollar
       });
-
-
+    }
   }
-  }
+
   return [
     {
       name: 'Earnings',
-      data: data.map(item => ({ x: item.x, y: item.y1 })),
+      data: data.map(item => ({ x: item.x, y: item.y1, valueWithCurrency: item.valueWithCurrency1 })),
     },
     {
       name: 'Expenses',
-      data: data.map(item => ({ x: item.x, y: item.y2 })),
+      data: data.map(item => ({ x: item.x, y: item.y2, valueWithCurrency: item.valueWithCurrency2 })),
     },
   ];
 };
@@ -62,7 +69,6 @@ const generateXAxisCategories = (type, year, month) => {
 
 
 
-
 //const generateXAxisCategories = (type, year, month) => {
  // const daysInMonth = new Date(year, month, 0).getDate();
   //if (type === 'month') {
@@ -76,7 +82,6 @@ const Income_outcome = () => {
   const [selectedYear, setSelectedYear] = useState(2024);
   const [selectedMonth, setSelectedMonth] = useState(1);
   const [chartData, setChartData] = useState(generateChartData('year', 2024, 12));
-  const [selectedValue, setSelectedValue] = useState(null);
 
   const handleChangeViewType = (event) => {
     setViewType(event.target.value);
@@ -93,12 +98,6 @@ const Income_outcome = () => {
     setChartData(generateChartData(viewType, selectedYear, event.target.value));
   };
 
-  const handleDataPointSelection = (event, chartContext, config) => {
-    const dataPointIndex = config.dataPointIndex;
-    const seriesIndex = config.seriesIndex;
-    const value = chartData[seriesIndex].data[dataPointIndex].y;
-    setSelectedValue(value);
-  };
   // Reste du code inchangé...
 
     const theme = useTheme();
@@ -179,12 +178,13 @@ const Income_outcome = () => {
       },
     },
   
-  
     tooltip: {
       theme: theme.palette.mode === 'dark' ? 'dark' : 'light',
       fillSeriesColor: false,
-      custom: ({ series, seriesIndex, dataPointIndex, w }) => {
-        return `<div style="padding: 10px; color: #fff;">${selectedValue ? '$' + selectedValue : ''}</div>`;
+      y: {
+        formatter: function (val, { seriesIndex, dataPointIndex, w }) {
+          return w.config.series[seriesIndex].data[dataPointIndex].valueWithCurrency;
+        },
       },
     },
   };
@@ -228,15 +228,7 @@ const Income_outcome = () => {
           )}
         </div>
       }>
-       <Chart 
-        options={optionsColumnChart} 
-        series={chartData} 
-        type="bar" 
-        height="370px" 
-        events={{
-          dataPointSelection: handleDataPointSelection,
-        }} 
-      />
+      <Chart options={optionsColumnChart} series={chartData} type="bar" height="370px" />
     </DashboardCard>
   );
 };
