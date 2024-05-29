@@ -1,7 +1,7 @@
 
 import { MdAccountCircle } from "react-icons/md"; 
 import {  IconLayoutDashboard, IconLogin,   IconUserPlus,IconCar,IconCamera,IconMoneybag,IconPlus
-,IconCash,IconBottle, IconTransitionRight,IconUser, IconUsers,IconFileAnalytics} from '@tabler/icons';
+,IconCash,IconBottle, IconTransitionRight,IconUser, IconUsers,IconFileAnalytics,IconFileDollar} from '@tabler/icons';
 
 
 import { uniqueId } from 'lodash';
@@ -33,12 +33,12 @@ const Menuitems = [
     navlabel: true,
     subheader: 'Vehicles',
   },*/
-  {
+ /* {
     id: uniqueId(),
     title: 'vehicles',
     icon: IconCar,
     href: '/ui/VEHICLES',
-  },
+  },*/
   /*{
     id: uniqueId(),
     title: 'Detected by camera',
@@ -50,12 +50,12 @@ const Menuitems = [
     navlabel: true,
     subheader: 'materials',
   },*/
-  {
+  /* {
     id: uniqueId(),
     title: 'Materials',
     icon: IconBottle,
     href: '/mat/Mats',
-  },
+  },*/
   {
     id: uniqueId(),
     title: 'Clients',
@@ -68,7 +68,7 @@ const Menuitems = [
     icon: IconPlus,
     href: '/mat/Add_mats',
   },*/
-  {
+  /* {
     navlabel: true,
     subheader: 'income',
   },
@@ -100,7 +100,7 @@ const Menuitems = [
     title: 'Employees',
     icon: IconUsers,
     href: '/Employee/Employees',
-  },
+  },*/
   {
     navlabel: true,
     subheader: 'Facturation',
@@ -108,8 +108,14 @@ const Menuitems = [
   {
     id: uniqueId(),
     title: 'Facture',
-    icon: IconFileAnalytics,
+    icon: IconFileDollar,
     href: '/FACTURE/Facture',
+  },
+  {
+    id: uniqueId(),
+    title: 'Devis',
+    icon: IconFileAnalytics,
+    href: '/DEVIS/Devis',
   },
   /*{
     id: uniqueId(),

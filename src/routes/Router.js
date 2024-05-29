@@ -27,7 +27,7 @@ const  Add_new_client = Loadable(lazy(() => import('src/views/Client/Add_new_cli
 const  Employees = Loadable(lazy(() => import('src/views/Employee/Employees')));
 const  Add_employee = Loadable(lazy(() => import('src/views/Employee/Add_employee')));
 const Facture = Loadable(lazy(() => import('../views/FACTURE/Facture')))
-
+const Devis = Loadable(lazy(() => import('../views/DEVIS/Devis')))
 const Router = [
   {
     path: '/',
@@ -52,6 +52,7 @@ const Router = [
       { path: '/Employee/Add_employee', exact: true, element: <Add_employee/> },        
       { path: '/auth/Account', element: <Account /> },
       { path: '/FACTURE/Facture', exact: true, element: <Facture/> },
+      { path: '/DEVIS/Devis', exact: true, element: <Devis/> },
     ],
   },
   {
